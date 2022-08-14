@@ -3,6 +3,7 @@ package com.zerobase.fastlms.member.service.imp;
 import com.zerobase.fastlms.components.MailComponents;
 import com.zerobase.fastlms.member.Repository.MemberRepository;
 import com.zerobase.fastlms.member.entity.Member;
+import com.zerobase.fastlms.member.exception.MemberNotEmailAuthException;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -56,12 +58,12 @@ public class MemberServiceImp implements MemberService {
             return false;
         }
         String uuid = UUID.randomUUID().toString();
-
+        String encPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
         Member member = Member.builder()
                 .userId(parameter.getUserId())
                 .userName(parameter.getUserName())
                 .phone(parameter.getPhone())
-                .password(parameter.getPassword())
+                .password(encPassword)
                 .regDateTime(LocalDateTime.now())
                 .emailAuth(false)
                 .emailAuthKey(uuid)
@@ -98,6 +100,9 @@ public class MemberServiceImp implements MemberService {
         }
 
         Member member = optionalMember.get();
+        if(!member.isEmailAuth()){
+            throw new MemberNotEmailAuthException("이메일을 인증을 해주세요");
+        }
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
