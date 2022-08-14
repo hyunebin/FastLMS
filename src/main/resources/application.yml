@@ -23,6 +23,10 @@ spring:
       ddl-auto: update
     show-sql: true
 
+logging:
+  level:
+    root: debug
+
 
 
 
