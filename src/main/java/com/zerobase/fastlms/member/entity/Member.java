@@ -29,4 +29,7 @@ public class Member {
     private String emailAuthKey;
     private LocalDateTime emailAuthTime;
 
+    private String resetPasswordKey;
+    private LocalDateTime resetPasswordLimitDt; // 해당 날짜가 지나면 사용할수없는 링크로 만들어줌
+
 }

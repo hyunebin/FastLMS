@@ -49,7 +49,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/", "/member/register", "/member/email-auth").permitAll();
+                .antMatchers("/", "/member/register", "/member/email-auth","/member/find/password", "/member/reset/password").permitAll();
 
         http.formLogin()
                 .loginPage("/member/login")
