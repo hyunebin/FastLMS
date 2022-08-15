@@ -49,7 +49,19 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/", "/member/register", "/member/email-auth","/member/find/password", "/member/reset/password").permitAll();
+                .antMatchers("/"
+                        , "/member/register"
+                        , "/member/email-auth"
+                        ,"/member/find/password"
+                        , "/member/reset/password")
+                .permitAll();
+
+        http.authorizeRequests()
+                        .antMatchers("/admin/*")
+                        .hasAnyAuthority("ROLE_ADMIN");
+
+        http.exceptionHandling().
+                accessDeniedPage("/error/denied");
 
         http.formLogin()
                 .loginPage("/member/login")

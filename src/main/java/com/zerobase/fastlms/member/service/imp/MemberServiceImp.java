@@ -34,6 +34,11 @@ public class MemberServiceImp implements MemberService {
         }
 
         Member member =optionalMember.get();
+        //이미 활성화된 계정은 활성화 취소
+        if(member.isEmailAuth()){
+            return false;
+        }
+
         member.setEmailAuth(true);
         member.setEmailAuthTime(LocalDateTime.now());
         memberRepository.save(member);
@@ -100,11 +105,9 @@ public class MemberServiceImp implements MemberService {
         }
 
         //초기화 날짜 유효한지까지 체크
-
-
         Member member = optionalMember.get();
 
-        if(member.getResetPasswordLimitDt() == null){
+        if(member.getResetPasswordLimitDt() == null ){
             throw new RuntimeException("유효한 날짜가 아닙니다.");
         }
 
@@ -185,6 +188,9 @@ public class MemberServiceImp implements MemberService {
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
 
+        if(member.isAdminYN()){
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
 
         return new User(member.getUserId(), member.getPassword(), grantedAuthorities);
     }
