@@ -1,6 +1,5 @@
 package com.zerobase.fastlms.member.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.service.MemberService;
 import com.zerobase.fastlms.member.model.MemberInput;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,7 +55,6 @@ public class MemberController {
     public String findPassword(){
        return "member/find_password";
     }
-
 
     @PostMapping("/member/find/password")
     public String findPasswordSubmit(Model model ,ResetPasswordInput resetPasswordInput){

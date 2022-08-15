@@ -27,20 +27,10 @@ public class MainController {
     //request 객체 -> WEB -> Server
     //response 객체 Server -> WEB
     //Spring MVC -> View가 템플릿 엔진 화면에 내용을 출력해줌
-    @RequestMapping("/hello")
-    public void hello(HttpServletRequest request, HttpServletResponse response){
 
-        response.setContentType("text/html;charset=UTF-8");
-        try {
-            PrintWriter printWriter = response.getWriter();
-            String msg = "<p> hello";
-
-            printWriter.write(msg);
-            printWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    @RequestMapping("/error/denied")
+    public String errorDenied(){
+        return "error/denied";
     }
 
 
