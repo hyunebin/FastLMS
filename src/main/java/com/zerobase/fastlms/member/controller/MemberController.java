@@ -30,8 +30,6 @@ public class MemberController {
        return "member/login";
    }
 
-
-
     @GetMapping("/member/register")
     public String register(){
         return "member/register";
