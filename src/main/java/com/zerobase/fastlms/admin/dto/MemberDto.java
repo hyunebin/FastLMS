@@ -1,9 +1,16 @@
 package com.zerobase.fastlms.admin.dto;
 
+import com.zerobase.fastlms.member.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
 public class MemberDto {
 
@@ -21,7 +28,27 @@ public class MemberDto {
     private String resetPasswordKey;
     private LocalDateTime resetPasswordLimitDt; // 해당 날짜가 지나면 사용할수없는 링크로 만들어줌
     private boolean adminYN;
+    private String userStatus;
 
     private long totalCount;
     private long seq;
+
+
+    public static MemberDto of(Member member) {
+
+        return MemberDto.builder()
+                .userId(member.getUserId())
+                .userName(member.getUserName())
+                .phone(member.getPhone())
+                //.password(member.getPassword())
+                .regDateTime(member.getRegDateTime())
+                .emailAuth(member.isEmailAuth())
+                .emailAuthTime(member.getEmailAuthTime())
+                .emailAuthKey(member.getEmailAuthKey())
+                .resetPasswordKey(member.getResetPasswordKey())
+                .resetPasswordLimitDt(member.getResetPasswordLimitDt())
+                .adminYN(member.isAdminYN())
+                .userStatus(member.getUserStatus())
+                .build();
+    }
 }
