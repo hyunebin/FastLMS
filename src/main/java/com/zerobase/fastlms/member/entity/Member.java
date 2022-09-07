@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 
-public class Member {
+public class Member implements MemberCode{
     @Id
     private String userId;
 
@@ -30,6 +30,8 @@ public class Member {
     private String resetPasswordKey;
     private LocalDateTime resetPasswordLimitDt; // 해당 날짜가 지나면 사용할수없는 링크로 만들어줌
     private boolean adminYN;
+
+    private String userStatus;
 
     //단순 관리자 여부를 지정 or 회원에 따른 ROLE을 지정할꺼냐
     //준회원/정회원/특별회원/관리자 등등등
