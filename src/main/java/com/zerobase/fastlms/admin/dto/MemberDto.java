@@ -21,4 +21,7 @@ public class MemberDto {
     private String resetPasswordKey;
     private LocalDateTime resetPasswordLimitDt; // 해당 날짜가 지나면 사용할수없는 링크로 만들어줌
     private boolean adminYN;
+
+    private long totalCount;
+    private long seq;
 }

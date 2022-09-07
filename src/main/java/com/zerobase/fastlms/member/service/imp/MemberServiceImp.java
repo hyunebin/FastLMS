@@ -2,6 +2,7 @@ package com.zerobase.fastlms.member.service.imp;
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
 import com.zerobase.fastlms.admin.mapper.MemberMapper;
+import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.components.MailComponents;
 import com.zerobase.fastlms.member.Repository.MemberRepository;
 import com.zerobase.fastlms.member.entity.Member;
@@ -17,12 +18,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -120,8 +119,6 @@ public class MemberServiceImp implements MemberService {
         }
 
         //초기화 날짜 유효한지까지 체크
-
-
         Member member = optionalMember.get();
 
         if(member.getResetPasswordLimitDt() == null){
@@ -168,10 +165,17 @@ public class MemberServiceImp implements MemberService {
     }
 
     @Override
-    public List<MemberDto> list() {
-        MemberDto memberDto = new MemberDto();
-        List<MemberDto> list = memberMapper.selectList(memberDto);
-
+    public List<MemberDto> list(MemberParam memberParam) {
+        long totalCount = memberMapper.selectListCount(memberParam);
+        List<MemberDto> list = memberMapper.selectList(memberParam);
+        if (!CollectionUtils.isEmpty(list)) {
+            int i = 0;
+            for(MemberDto x : list) {
+                x.setTotalCount(totalCount);
+                x.setSeq(totalCount - memberParam.getPageStart() - i);
+                i++;
+            }
+        }
 
         return list;
     }
@@ -188,6 +192,7 @@ public class MemberServiceImp implements MemberService {
         if(!member.isEmailAuth()){
             throw new MemberNotEmailAuthException("이메일을 인증을 해주세요");
         }
+
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 

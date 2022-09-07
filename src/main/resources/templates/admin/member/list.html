@@ -40,20 +40,20 @@
 
     <div class="list">
 
-<!--        <div class="search-form">-->
-<!--            <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>-->
+        <div class="search-form">
+            <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>
 
-<!--            <form method="get">-->
-<!--                <select name="searchType">-->
-<!--                    <option value="all">전체</option>-->
-<!--                    <option th:selected="${#strings.equals(param.searchType, 'userId')}" value="userId">아이디</option>-->
-<!--                    <option th:selected="${#strings.equals(param.searchType, 'userName')}" value="userName">이름</option>-->
-<!--                    <option th:selected="${#strings.equals(param.searchType, 'phone')}" value="phone">연락처</option>-->
-<!--                </select>-->
-<!--                <input th:value="${param.searchValue}" type="sear" name="searchValue" placeholder="검색어 입력"/>-->
-<!--                <button type="submit">검색</button>-->
-<!--            </form>-->
-<!--       </div>-->
+            <form method="get">
+                <select name="searchType">
+                    <option value="all">전체</option>
+                    <option th:selected="${#strings.equals(param.searchType, 'userId')}" value="userId">아이디</option>
+                    <option th:selected="${#strings.equals(param.searchType, 'userName')}" value="userName">이름</option>
+                    <option th:selected="${#strings.equals(param.searchType, 'phone')}" value="phone">연락처</option>
+                </select>
+                <input th:value="${param.searchValue}" type="search" name="searchValue" placeholder="검색어 입력"/>
+                <button type="submit">검색</button>
+            </form>
+       </div>
 
         <table>
             <thead>
@@ -82,7 +82,7 @@
 
             <tbody>
             <tr th:each="x : ${list}">
-                    <td>1</td>
+                    <td th:text="${x.seq}">1</td>
                     <td>
                         <a th:text="${x.userId}"
                            th:href="${'detail.do?userId=' + x.userId}">
