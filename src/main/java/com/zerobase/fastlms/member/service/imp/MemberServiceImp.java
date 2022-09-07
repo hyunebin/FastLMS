@@ -1,5 +1,8 @@
 package com.zerobase.fastlms.member.service.imp;
 
+import com.zerobase.fastlms.admin.dto.MemberDto;
+import com.zerobase.fastlms.admin.mapper.MemberMapper;
+import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.components.MailComponents;
 import com.zerobase.fastlms.member.Repository.MemberRepository;
 import com.zerobase.fastlms.member.entity.Member;
@@ -15,17 +18,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 
 public class MemberServiceImp implements MemberService {
+    /**
+     public MemberServiceImp(MemberRepository memberRepository){
+     this.memberRepository = memberRepository;
+     }
+     **/
+    private final MemberRepository memberRepository;
+    private final MailComponents mailComponents;
+
+    private final MemberMapper memberMapper;
+
     @Override
     public boolean emailAuth(String uuid) {
         Optional<Member> optionalMember = memberRepository.findByEmailAuthKey(uuid);
@@ -33,7 +44,7 @@ public class MemberServiceImp implements MemberService {
             return false;
         }
 
-        Member member =optionalMember.get();
+        Member member = optionalMember.get();
         //이미 활성화된 계정은 활성화 취소
         if(member.isEmailAuth()){
             return false;
@@ -46,13 +57,6 @@ public class MemberServiceImp implements MemberService {
         return true;
     }
 
-    private final MemberRepository memberRepository;
-    private final MailComponents mailComponents;
-    /**
-    public MemberServiceImp(MemberRepository memberRepository){
-        this.memberRepository = memberRepository;
-    }
-     **/
 
     //회원 가입
     @Override
@@ -63,6 +67,7 @@ public class MemberServiceImp implements MemberService {
             //중복된 userId가 존재한다는것
             return false;
         }
+
         String uuid = UUID.randomUUID().toString();
         String encPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
         Member member = Member.builder()
@@ -75,17 +80,6 @@ public class MemberServiceImp implements MemberService {
                 .emailAuthKey(uuid)
                 .build();
         memberRepository.save(member);
-        /** builder 패턴을 사용함으로써 위처럼 간단하게 줄일 수 있음
-        Member member = new Member();
-        member.setUserId(parameter.getUserId());
-        member.setUserName(parameter.getUserName());
-        member.setPassword(parameter.getPassword());
-        member.setPhone(parameter.getPhone());
-        member.setRegDateTime(LocalDateTime.now());
-        member.setEmailAuth(false);
-        member.setEmailAuthKey(uuid);
-        **/
-
 
         String email = parameter.getUserId();
         String subject = "lms 사이트 가입 확인";
@@ -125,8 +119,6 @@ public class MemberServiceImp implements MemberService {
         }
 
         //초기화 날짜 유효한지까지 체크
-
-
         Member member = optionalMember.get();
 
         if(member.getResetPasswordLimitDt() == null){
@@ -173,6 +165,22 @@ public class MemberServiceImp implements MemberService {
     }
 
     @Override
+    public List<MemberDto> list(MemberParam memberParam) {
+        long totalCount = memberMapper.selectListCount(memberParam);
+        List<MemberDto> list = memberMapper.selectList(memberParam);
+        if (!CollectionUtils.isEmpty(list)) {
+            int i = 0;
+            for(MemberDto x : list) {
+                x.setTotalCount(totalCount);
+                x.setSeq(totalCount - memberParam.getPageStart() - i);
+                i++;
+            }
+        }
+
+        return list;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> optionalMember = memberRepository.findById(username);
 
@@ -184,6 +192,7 @@ public class MemberServiceImp implements MemberService {
         if(!member.isEmailAuth()){
             throw new MemberNotEmailAuthException("이메일을 인증을 해주세요");
         }
+
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 

@@ -1,11 +1,9 @@
-
 spring:
-
   mail:
     host: smtp.gmail.com
     port: 587
     username: tjrhk01@gmail.com
-    password: ftnzwqsrhbfiyrud
+    password: nmkyomkcxvblldzx
     properties:
       mail:
         smtp:
@@ -26,6 +24,13 @@ spring:
 logging:
   level:
     root: debug
+
+mybatis:
+  mapper-locations: mybatis/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 
 
