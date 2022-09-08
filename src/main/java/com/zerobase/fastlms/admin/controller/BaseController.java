@@ -1,4 +1,4 @@
-package com.zerobase.fastlms.admin;
+package com.zerobase.fastlms.admin.controller;
 
 import com.zerobase.fastlms.util.PageUtil;
 
