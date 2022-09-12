@@ -18,7 +18,6 @@ import java.util.List;
 public class AdminMemberController extends BaseController {
     private final MemberService memberService;
 
-
     @PostMapping("/admin/member/status.do")
     public String status(Model model, MemberInput memberInput){
 
@@ -53,6 +52,7 @@ public class AdminMemberController extends BaseController {
         List<MemberDto> members = memberService.list(parameter);
 
         long totalCount = 0;
+
         if (members != null && members.size() > 0) {
             totalCount = members.get(0).getTotalCount();
         }

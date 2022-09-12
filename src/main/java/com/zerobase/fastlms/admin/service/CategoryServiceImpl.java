@@ -51,7 +51,6 @@ public class CategoryServiceImpl implements CategoryService{
             return false;
         }
 
-
         Category category = optionalCategory.get();
         category.setCategoryName(cateGoryInput.getCategoryName());
         category.setSortValue(cateGoryInput.getSortValue());

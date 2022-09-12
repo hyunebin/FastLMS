@@ -47,7 +47,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-
+        http.headers().frameOptions().sameOrigin();
         http.authorizeRequests()
                 .antMatchers("/"
                         , "/member/register"

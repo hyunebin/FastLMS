@@ -28,7 +28,6 @@ public class CategoryDto {
             for(Category x : categoryList){
                 categoryDtoList.add(of(x));
             }
-
             return categoryDtoList;
         }
 
