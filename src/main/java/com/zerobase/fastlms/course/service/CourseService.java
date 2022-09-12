@@ -16,4 +16,6 @@ public interface CourseService {
     boolean update(CourseInput courseInput);
 
     boolean delete(String idList);
+
+    List<CourseDto> frontList(CourseParam courseParam);
 }
