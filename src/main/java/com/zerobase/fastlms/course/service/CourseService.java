@@ -18,4 +18,6 @@ public interface CourseService {
     boolean delete(String idList);
 
     List<CourseDto> frontList(CourseParam courseParam);
+
+    CourseDto frontDetail(Long id);
 }

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,6 +35,15 @@ public class CourseController {
         model.addAttribute("courseTotalCount", courseTotalCount);
 
         return "course/index";
+    }
+
+
+    @GetMapping("/course/{id}")
+    public String courseDetail(CourseParam courseParam, Model model){
+         CourseDto courseDto = courseService.frontDetail(courseParam.getId());
+
+         model.addAttribute("detail", courseDto);
+        return "course/detail";
     }
 
 

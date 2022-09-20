@@ -72,6 +72,15 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
+    public CourseDto frontDetail(Long id) {
+        Optional<Course> course = courseRepository.findById(id);
+        if (course.isPresent()){
+            return CourseDto.of(course.get());
+        }
+        return null;
+    }
+
+    @Override
     public List<CourseDto> frontList(CourseParam courseParam) {
 
         if(courseParam.getCategoryId() < 1){
