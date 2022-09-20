@@ -1,6 +1,7 @@
 package com.zerobase.fastlms.course.controller;
 
 
+import com.zerobase.fastlms.admin.dto.CategoryDto;
 import com.zerobase.fastlms.admin.service.CategoryService;
 import com.zerobase.fastlms.course.dto.CourseDto;
 import com.zerobase.fastlms.course.model.CourseParam;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,10 +24,16 @@ public class CourseController {
     public String course(Model model, CourseParam courseParam){
 
         List<CourseDto> list = courseService.frontList(courseParam);
-
-        model.addAttribute("categoryList", null);
+        List<CategoryDto> categoryList = categoryService.frontList(CategoryDto.builder().build());
+        int courseTotalCount = 0;
+        if (categoryList != null){
+            for(CategoryDto x : categoryList){
+                courseTotalCount += x.getCourseCount();
+            }
+        }
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("list", list);
-        model.addAttribute("courseTotalCount", null);
+        model.addAttribute("courseTotalCount", courseTotalCount);
 
         return "course/index";
     }
