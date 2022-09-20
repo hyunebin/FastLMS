@@ -15,4 +15,7 @@ public interface CategoryService {
     boolean update(CateGoryInput cateGoryInput);
 
     boolean delete(Long id);
+
+    //실제 보여줄 카테고리 목록
+    List<CategoryDto> frontList(CategoryDto categoryDto);
 }

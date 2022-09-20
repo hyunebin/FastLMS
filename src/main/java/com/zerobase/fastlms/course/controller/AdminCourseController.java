@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class adminCourseController extends BaseController {
+public class AdminCourseController extends BaseController {
 
     private final CourseService courseService;
     private final CategoryService categoryService;
@@ -34,6 +34,7 @@ public class adminCourseController extends BaseController {
         if (courses != null && courses.size() > 0) {
             totalCount = courses.get(0).getTotalCount();
         }
+
         String queryString = parameter.getQueryString();
         String pagerHtml = getPaperHtml(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString);
 

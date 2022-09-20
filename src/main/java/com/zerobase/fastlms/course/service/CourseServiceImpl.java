@@ -41,6 +41,7 @@ public class CourseServiceImpl implements CourseService{
         LocalDate saleEndDt = getLocalDate(courseInput.getSaleEndDtText());
 
         Course course = Course.builder()
+                .categoryId(courseInput.getCategoryId())
                 .subject(courseInput.getSubject())
                 .regDt(LocalDateTime.now())
                 .keyword(courseInput.getKeyword())
@@ -67,6 +68,29 @@ public class CourseServiceImpl implements CourseService{
 //        return CourseDto.of(course);
 
         return  courseRepository.findById(id).map(CourseDto::of).orElseThrow(null);
+
+    }
+
+    @Override
+    public CourseDto frontDetail(Long id) {
+        Optional<Course> course = courseRepository.findById(id);
+        if (course.isPresent()){
+            return CourseDto.of(course.get());
+        }
+        return null;
+    }
+
+    @Override
+    public List<CourseDto> frontList(CourseParam courseParam) {
+
+        if(courseParam.getCategoryId() < 1){
+            List<Course> courseList = courseRepository.findAll();
+            return CourseDto.of(courseList);
+        }
+
+        Optional<List<Course>> optionalCourses = courseRepository.findByCategoryId(courseParam.getCategoryId());
+
+        return optionalCourses.map(CourseDto::of).orElse(null);
 
     }
 
