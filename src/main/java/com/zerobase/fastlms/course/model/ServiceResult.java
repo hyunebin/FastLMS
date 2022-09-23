@@ -1,4 +1,4 @@
-package com.zerobase.fastlms.course.service;
+package com.zerobase.fastlms.course.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -8,6 +8,7 @@ import com.zerobase.fastlms.course.entity.TakeCourse;
 import com.zerobase.fastlms.course.mapper.CourseMapper;
 import com.zerobase.fastlms.course.model.CourseInput;
 import com.zerobase.fastlms.course.model.CourseParam;
+import com.zerobase.fastlms.course.model.ServiceResult;
 import com.zerobase.fastlms.course.model.TakeCourseInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,11 @@ public class CourseServiceImpl implements CourseService{
         courseRepository.save(course);
 
         return true;
+    }
+
+    @Override
+    public List<CourseDto> listAll() {
+        return null;
     }
 
     @Override
