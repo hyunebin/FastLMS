@@ -4,7 +4,7 @@ import com.zerobase.fastlms.admin.service.CategoryService;
 import com.zerobase.fastlms.common.model.ResponseResult;
 import com.zerobase.fastlms.course.model.TakeCourseInput;
 import com.zerobase.fastlms.course.service.CourseService;
-import com.zerobase.fastlms.course.service.ServiceResult;
+import com.zerobase.fastlms.course.model.ServiceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
