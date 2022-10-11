@@ -48,6 +48,7 @@ public class MemberDto {
                 .phone(member.getPhone())
                 //.password(member.getPassword())
                 .regDateTime(member.getRegDateTime())
+                .updateDateTime(member.getUpdateDateTime())
                 .emailAuth(member.isEmailAuth())
                 .emailAuthTime(member.getEmailAuthTime())
                 .emailAuthKey(member.getEmailAuthKey())

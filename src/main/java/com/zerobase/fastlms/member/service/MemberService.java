@@ -24,4 +24,6 @@ public interface MemberService extends UserDetailsService {
     boolean updatePassword(String userId, String password);
 
     ServiceResult memberUpdatePassword(MemberInput memberInput); // 사용자의 비밀번호 변경
+
+    ServiceResult memberUpdate(MemberInput memberInput);
 }

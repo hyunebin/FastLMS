@@ -53,6 +53,19 @@ public class MemberController {
         return "member/info";
     }
 
+    //회원 정보의 수정 - 변경 정보, 보여주는 정보, 보여줄 필요가없는 정보
+    @PostMapping("/member/info")
+    public String submitMemberInfo(MemberInput memberInput, Principal principal, Model model){
+        memberInput.setUserId(principal.getName());
+        ServiceResult result = memberService.memberUpdate(memberInput);
+
+        if(!result.isResult()){
+            model.addAttribute("message", result.getMessage());
+            return "/common/error";
+        }
+        return "redirect:/member/info";
+    }
+
     @GetMapping("/member/find/password")
     public String findPassword() {
         return "member/find_password";

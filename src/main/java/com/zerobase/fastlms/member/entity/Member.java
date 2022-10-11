@@ -23,7 +23,7 @@ public class Member implements MemberCode{
     private String phone;
     private String password;
     private LocalDateTime regDateTime;
-
+    private LocalDateTime updateDateTime;
     private boolean emailAuth;
     private String emailAuthKey;
     private LocalDateTime emailAuthTime;

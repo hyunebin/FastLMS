@@ -82,6 +82,22 @@ public class MemberServiceImp implements MemberService {
     }
 
     @Override
+    public ServiceResult memberUpdate(MemberInput memberInput) {
+        Optional<Member> optionalMember = memberRepository.findById(memberInput.getUserId());
+
+        if(!optionalMember.isPresent()){
+            return new ServiceResult(false,"회원 정보가 존재하지 않습니다.");
+        }
+
+        Member member = optionalMember.get();
+        member.setPhone(memberInput.getPhone());
+        member.setUpdateDateTime(LocalDateTime.now());
+
+        memberRepository.save(member);
+        return new ServiceResult(true,"");
+    }
+
+    @Override
     public ServiceResult memberUpdatePassword(MemberInput memberInput) {
         Optional<Member> optionalMember = memberRepository.findById(memberInput.getUserId()); // 해당 사용자의 정보를 불러옴
 
