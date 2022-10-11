@@ -1,6 +1,7 @@
 package com.zerobase.fastlms.member.controller;
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
+import com.zerobase.fastlms.course.service.ServiceResult;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.service.MemberService;
@@ -110,8 +111,24 @@ public class MemberController {
     }
 
     @GetMapping("/member/password")
-    public String memberPassword(Model model, Principal principal) {
-        return "member/info";
+    public String memberPassword() {
+        return "member/password";
+    }
+
+
+    @PostMapping("/member/password")
+    public String SubmitMemberPassword(MemberInput memberInput, Principal principal, Model model) {
+        String userId = principal.getName(); // 접속한 회원의 아이디
+        memberInput.setUserId(userId);// 해당 회원의 아이디로 정보를 받아오기 위해
+
+        ServiceResult result = memberService.memberUpdatePassword(memberInput); // 비밀번호 변경 로직
+
+       if(!result.isResult()){
+           model.addAttribute("message", result.getMessage());
+           return "common/error";
+       }
+
+        return "redirect:/member/info";
     }
 
     @GetMapping("/member/takecourse")

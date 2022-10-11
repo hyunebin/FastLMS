@@ -4,6 +4,7 @@ import com.zerobase.fastlms.admin.dto.MemberDto;
 import com.zerobase.fastlms.admin.mapper.MemberMapper;
 import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.components.MailComponents;
+import com.zerobase.fastlms.course.service.ServiceResult;
 import com.zerobase.fastlms.member.Repository.MemberRepository;
 import com.zerobase.fastlms.member.entity.Member;
 import com.zerobase.fastlms.member.entity.MemberCode;
@@ -78,6 +79,27 @@ public class MemberServiceImp implements MemberService {
         memberRepository.save(member);
 
         return true;
+    }
+
+    @Override
+    public ServiceResult memberUpdatePassword(MemberInput memberInput) {
+        Optional<Member> optionalMember = memberRepository.findById(memberInput.getUserId()); // 해당 사용자의 정보를 불러옴
+
+        if(!optionalMember.isPresent()){
+            return new ServiceResult(false, "회원 정보가 존재하지 않습니다.");
+        }
+
+        Member member = optionalMember.get();
+        if(!BCrypt.checkpw(memberInput.getPassword(), member.getPassword())){ // 암호화 된 비밀번호와 회원이 입력한 비밀번호가 같은지 확인
+            return new ServiceResult(false, "비밀번호가 일치하지 않습니다.");
+        }
+
+        String encPassword = BCrypt.hashpw(memberInput.getNewPassword(), BCrypt.gensalt());// 새롭게 입력한 비밀번호
+        member.setPassword(encPassword);//변경
+        memberRepository.save(member);//저장
+
+
+        return new ServiceResult(true,"");
     }
 
     @Override
