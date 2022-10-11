@@ -92,6 +92,9 @@ public class MemberServiceImp implements MemberService {
         Member member = optionalMember.get();
         member.setPhone(memberInput.getPhone());
         member.setUpdateDateTime(LocalDateTime.now());
+        member.setAddr(memberInput.getAddr());
+        member.setZipcode(memberInput.getZipcode());
+        member.setAddrDetail(memberInput.getAddrDetail());
 
         memberRepository.save(member);
         return new ServiceResult(true,"");

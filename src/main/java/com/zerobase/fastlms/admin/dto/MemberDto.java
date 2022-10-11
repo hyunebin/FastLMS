@@ -56,6 +56,9 @@ public class MemberDto {
                 .resetPasswordLimitDt(member.getResetPasswordLimitDt())
                 .adminYN(member.isAdminYN())
                 .userStatus(member.getUserStatus())
+                .zipcode(member.getZipcode())
+                .addr(member.getAddr())
+                .addrDetail(member.getAddrDetail())
                 .build();
     }
 
