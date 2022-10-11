@@ -26,14 +26,14 @@ public class ApiCourseController extends BaseController{
             Principal principal)
     {
         takeCourseInput.setUserId(principal.getName());
-        ServiceResult result = courseService.req(takeCourseInput);
+        ServiceResult result = courseService.req(takeCourseInput); //신청결과를 리턴해줌
 
-        if(!result.isResult()){
+        if(!result.isResult()){ // 신청결과가 false라면
             ResponseResult responseResult = new ResponseResult(false, result.getMessage());
             return ResponseEntity.ok().body(responseResult);
         }
 
-        ResponseResult responseResult = new ResponseResult(true);
+        ResponseResult responseResult = new ResponseResult(true);//성공시
 
         return ResponseEntity.ok().body(responseResult);
     }

@@ -5,6 +5,7 @@ import lombok.ToString;
 
 @Data
 @ToString
+//맴버등록시 사용할 model
 public class MemberInput {
     private String userId;
     private String userName;

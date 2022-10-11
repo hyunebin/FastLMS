@@ -8,7 +8,7 @@ public class CommonParam {
     long pageIndex;
     long pageSize;
     
-    String searchType;
+    String searchType; // 제목, 이름 등등 찾을 컬럼? 이라 생각하는게 좋은듯
     String searchValue;
     
     
@@ -22,12 +22,12 @@ public class CommonParam {
         return pageSize;
     }
     
-    public void init() {
+    public void init() { // 만약 pageIndex가 1보다 작으면 1로
         if (pageIndex < 1) {
             pageIndex = 1;
         }
     
-        if (pageSize < 10) {
+        if (pageSize < 10) {// page 크기가 10보다 작으면 10으로 고정
             pageSize = 10;
         }
     }
