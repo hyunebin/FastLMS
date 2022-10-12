@@ -67,7 +67,8 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public List<CourseDto> listAll() {
-        return null;
+        List<Course> courseList = courseRepository.findAll();
+        return CourseDto.of(courseList);
     }
 
     @Override

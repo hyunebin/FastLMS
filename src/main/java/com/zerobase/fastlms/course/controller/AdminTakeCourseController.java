@@ -46,6 +46,9 @@ public class AdminTakeCourseController extends BaseController {
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("pager", pagerHtml);
 
+        List<CourseDto> courseDtoList = courseService.listAll();
+        model.addAttribute("courseList", courseDtoList);
+
         return "admin/takecourse/list";
     }
 

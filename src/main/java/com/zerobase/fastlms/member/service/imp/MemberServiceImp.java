@@ -328,7 +328,7 @@ public class MemberServiceImp implements MemberService {
         }
 
         if(Member.MEMBER_STAUTS_WITHDRAW.equals(member.getUserStatus())){
-            throw new MemberStopUserException("탈퇴한 회원 입니다.");
+            throw new MemberStopUserException("탈퇴한 회원  입니다.");
         }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
