@@ -1,7 +1,9 @@
 package com.zerobase.fastlms.member.controller;
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
+import com.zerobase.fastlms.course.dto.TakeCourseDto;
 import com.zerobase.fastlms.course.service.ServiceResult;
+import com.zerobase.fastlms.course.service.TakeCourseService;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.service.MemberService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ import java.security.Principal;
 public class MemberController {
 
     private final MemberService memberService; // 생성자 주입을 위한 private final
+    private final TakeCourseService takeCourseService;// 맴버가 자신에 대한 수강신청 관리
 
     @RequestMapping("/member/login")
     public String login() {
@@ -145,7 +149,19 @@ public class MemberController {
     }
 
     @GetMapping("/member/takecourse")
-    public String takeCourse() {
+    public String takeCourse(Model model, Principal principal) {
+        String userId = principal.getName();
+        List<TakeCourseDto> myCourse = takeCourseService.myCourse(userId);
+
+        model.addAttribute("list", myCourse);
         return "member/takecourse";
     }
+
+    @PostMapping("/member/takecourse")
+    public String cancleTakeCourse(Model model, Principal principal) {
+
+        return "member/takecourse";
+    }
+
+
 }

@@ -3,6 +3,7 @@ package com.zerobase.fastlms.course.service;
 import com.zerobase.fastlms.course.Repository.TakeCourseRepository;
 import com.zerobase.fastlms.course.dto.TakeCourseDto;
 import com.zerobase.fastlms.course.entity.TakeCourse;
+import com.zerobase.fastlms.course.entity.TakeCourseCode;
 import com.zerobase.fastlms.course.mapper.TakeCourseMapper;
 import com.zerobase.fastlms.course.model.ServiceResult;
 import com.zerobase.fastlms.course.model.TakeCourseParam;
@@ -19,6 +20,41 @@ public class TakeCourseServiceImpl implements TakeCourseService {
 
     private final TakeCourseMapper takeCourseMapper;
     private final TakeCourseRepository takeCourseRepository;
+
+    @Override
+    public List<TakeCourseDto> myCourse(String userId) {
+        TakeCourseParam takeCourseParam = new TakeCourseParam();
+        takeCourseParam.setUserId(userId);
+        return takeCourseMapper.selectListMyCourse(takeCourseParam);
+    }
+
+    @Override
+    public ServiceResult cancelMemberCourse(long takeCourseId) {
+        Optional<TakeCourse> optionalTakeCourse = takeCourseRepository.findById(takeCourseId);
+
+        if(!optionalTakeCourse.isPresent()){
+            return new ServiceResult(false, "수강 정보가 존재하지 않습니다.");
+        }
+
+        TakeCourse takeCourse = optionalTakeCourse.get();
+        takeCourse.setStatus(TakeCourseCode.STATUS_CANCEL);
+        takeCourseRepository.save(takeCourse);
+        return new ServiceResult(true, "");
+    }
+
+    @Override
+    public TakeCourseDto getCourseDetail(long id) {
+
+        Optional<TakeCourse> optionalTakeCourse = takeCourseRepository.findById(id);
+
+        if(!optionalTakeCourse.isPresent()){
+            return null;
+        }
+
+
+        return TakeCourseDto.of(optionalTakeCourse.get());
+    }
+
     @Override
     public ServiceResult updateStatus(long id, String status) {
         Optional<TakeCourse> optionalTakeCourse = takeCourseRepository.findById(id);
