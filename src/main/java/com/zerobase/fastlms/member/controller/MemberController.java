@@ -8,6 +8,7 @@ import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -158,9 +159,29 @@ public class MemberController {
     }
 
     @PostMapping("/member/takecourse")
-    public String cancleTakeCourse(Model model, Principal principal) {
+    public String cancelTakeCourse(Model model, Principal principal) {
 
         return "member/takecourse";
+    }
+
+    @GetMapping("/member/withdraw")
+    public String withdrawMember(Principal principal){
+        return "/member/withdraw";
+    }
+
+    @PostMapping("/member/withdraw")
+    public String withdrawMember(Principal principal, MemberInput memberInput, Model model){
+
+        memberInput.setUserId(principal.getName());
+
+        ServiceResult result = memberService.withdraw(principal.getName(), memberInput.getPassword());
+
+        if(result.isResult()){
+            model.addAttribute("message", result.getMessage());
+            return "/common/error";
+        }
+
+        return "redirect:/member/logout";
     }
 
 

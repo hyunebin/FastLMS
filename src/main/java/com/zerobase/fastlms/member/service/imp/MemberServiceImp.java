@@ -82,6 +82,43 @@ public class MemberServiceImp implements MemberService {
     }
 
     @Override
+    public ServiceResult withdraw(String userId, String password) {
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+
+
+
+        if(!optionalMember.isPresent()){
+            return new ServiceResult(false,"회원 정보가 존재하지 않습니다.");
+        }
+
+
+        Member member = optionalMember.get();
+
+        if(!BCrypt.checkpw(password, member.getPassword())){
+            return new ServiceResult(false,"비밀 번호가 일치하지 않습니다.");
+        }
+
+
+        member.setUserName("삭제 회원");
+        member.setPhone("");
+        member.setPassword("");
+        member.setRegDateTime(null);
+        member.setZipcode("");
+        member.setUpdateDateTime(null);
+        member.setResetPasswordKey("");
+        member.setAddr("");
+        member.setAddrDetail("");
+        member.setUserStatus(MemberCode.MEMBER_STAUTS_WITHDRAW);
+        member.setEmailAuth(false);
+        member.setEmailAuthKey(null);
+        member.setResetPasswordLimitDt(null);
+        memberRepository.save(member);
+
+
+        return new ServiceResult(true,"");
+    }
+
+    @Override
     public ServiceResult memberUpdate(MemberInput memberInput) {
         Optional<Member> optionalMember = memberRepository.findById(memberInput.getUserId());
 
@@ -288,6 +325,10 @@ public class MemberServiceImp implements MemberService {
 
         if(Member.MEMBER_STATUS_STOP.equals(member.getUserStatus())){
             throw new MemberStopUserException("정지된 회원 입니다.");
+        }
+
+        if(Member.MEMBER_STAUTS_WITHDRAW.equals(member.getUserStatus())){
+            throw new MemberStopUserException("탈퇴한 회원 입니다.");
         }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
