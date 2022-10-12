@@ -22,8 +22,8 @@ public class CourseController {
     @GetMapping("/course")
     public String course(Model model, CourseParam courseParam){
 
-        List<CourseDto> list = courseService.frontList(courseParam);
-        List<CategoryDto> categoryList = categoryService.frontList(CategoryDto.builder().build());
+        List<CourseDto> list = courseService.frontList(courseParam); // 강좌 목록중 사용하는 목록 안하는 목록 존재 사용자에 보여줄 frontList가 필요
+        List<CategoryDto> categoryList = categoryService.frontList(CategoryDto.builder().build());// 카테고리또한 위와 같은 이유
         int courseTotalCount = 0;
         if (categoryList != null){
             for(CategoryDto x : categoryList){

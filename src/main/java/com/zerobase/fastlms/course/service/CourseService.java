@@ -11,7 +11,7 @@ import java.util.List;
 public interface CourseService {
     boolean add(CourseInput courseInput);
 
-    List<CourseDto> list(CourseParam courseParam);
+    List<CourseDto> list(CourseParam courseParam); // 코스 리스트 불러옴
 
     CourseDto getById(long id);
 

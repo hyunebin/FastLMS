@@ -1,9 +1,9 @@
 package com.zerobase.fastlms.course.service;
 
 import com.zerobase.fastlms.course.Repository.TakeCourseRepository;
-import com.zerobase.fastlms.course.dto.CourseDto;
 import com.zerobase.fastlms.course.dto.TakeCourseDto;
 import com.zerobase.fastlms.course.entity.TakeCourse;
+import com.zerobase.fastlms.course.entity.TakeCourseCode;
 import com.zerobase.fastlms.course.mapper.TakeCourseMapper;
 import com.zerobase.fastlms.course.model.ServiceResult;
 import com.zerobase.fastlms.course.model.TakeCourseParam;
@@ -20,21 +20,56 @@ public class TakeCourseServiceImpl implements TakeCourseService {
 
     private final TakeCourseMapper takeCourseMapper;
     private final TakeCourseRepository takeCourseRepository;
+
+    @Override
+    public List<TakeCourseDto> myCourse(String userId) {
+        TakeCourseParam takeCourseParam = new TakeCourseParam();
+        takeCourseParam.setUserId(userId);
+        return takeCourseMapper.selectListMyCourse(takeCourseParam);
+    }
+
+    @Override
+    public ServiceResult cancelMemberCourse(long takeCourseId) {
+        Optional<TakeCourse> optionalTakeCourse = takeCourseRepository.findById(takeCourseId);
+
+        if(!optionalTakeCourse.isPresent()){
+            return new ServiceResult(false, "수강 정보가 존재하지 않습니다.");
+        }
+
+        TakeCourse takeCourse = optionalTakeCourse.get();
+        takeCourse.setStatus(TakeCourseCode.STATUS_CANCEL);
+        takeCourseRepository.save(takeCourse);
+        return new ServiceResult(true, "");
+    }
+
+    @Override
+    public TakeCourseDto getCourseDetail(long id) {
+
+        Optional<TakeCourse> optionalTakeCourse = takeCourseRepository.findById(id);
+
+        if(!optionalTakeCourse.isPresent()){
+            return null;
+        }
+
+
+        return TakeCourseDto.of(optionalTakeCourse.get());
+    }
+
     @Override
     public ServiceResult updateStatus(long id, String status) {
         Optional<TakeCourse> optionalTakeCourse = takeCourseRepository.findById(id);
         if(!optionalTakeCourse.isPresent()){
             return new ServiceResult(false, "수강 정보가 없습니다.");
         }
-        TakeCourse takeCourse = optionalTakeCourse.get();
-        takeCourse.setStatus(status);
-        takeCourseRepository.save(takeCourse);
+        TakeCourse takeCourse = optionalTakeCourse.get(); // 수강 신청 정보를 받고
+        takeCourse.setStatus(status);//입력한 수강 신청 정보로 변경
+        takeCourseRepository.save(takeCourse);// db저장
 
         return new ServiceResult(true,"");
     }
 
     @Override
-    public List<TakeCourseDto> list(TakeCourseParam takeCourseParam) {
+    public List<TakeCourseDto> list(TakeCourseParam takeCourseParam) {// 기존 있던 리스트를 불러오는 방식과 동일
         long totalCount = takeCourseMapper.selectListCount(takeCourseParam);
         List<TakeCourseDto> list = takeCourseMapper.selectList(takeCourseParam);
 

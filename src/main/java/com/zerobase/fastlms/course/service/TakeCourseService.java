@@ -9,4 +9,10 @@ import java.util.List;
 public interface TakeCourseService {
     List<TakeCourseDto> list(TakeCourseParam TakeCourseParam);
     ServiceResult updateStatus(long id, String status);
+
+    List<TakeCourseDto> myCourse(String userId);
+
+    TakeCourseDto getCourseDetail(long id);
+
+    ServiceResult cancelMemberCourse(long takeCourseId);
 }

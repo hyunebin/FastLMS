@@ -28,12 +28,12 @@ public class AdminTakeCourseController extends BaseController {
     private final CourseService courseService;
     private final TakeCourseService takeCourseService;
     
-    @GetMapping("/admin/takecourse/list.do")
+    @GetMapping("/admin/takecourse/list.do")// 회원들의 수강 신청 리스트 불러옴
     public String list(Model model, TakeCourseParam parameter
         , BindingResult bindingResult) {
     
         parameter.init();
-        List<TakeCourseDto> list = takeCourseService.list(parameter);
+        List<TakeCourseDto> list = takeCourseService.list(parameter);// 리스트를 불러오는 로직
         
         long totalCount = 0;
         if (!CollectionUtils.isEmpty(list)) {
@@ -45,20 +45,17 @@ public class AdminTakeCourseController extends BaseController {
         model.addAttribute("list", list);
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("pager", pagerHtml);
-        
-        
-//        List<CourseDto> courseList = courseService.listAll();
-//        model.addAttribute("courseList", courseList);
-        
-        
-    
+
+        List<CourseDto> courseDtoList = courseService.listAll();
+        model.addAttribute("courseList", courseDtoList);
+
         return "admin/takecourse/list";
     }
 
     @PostMapping("/admin/takecourse/status.do")
     public String status(Model model, TakeCourseParam takeCourseParam){
         takeCourseParam.init();
-        ServiceResult result = takeCourseService.updateStatus(takeCourseParam.getId(), takeCourseParam.getStatus());
+        ServiceResult result = takeCourseService.updateStatus(takeCourseParam.getId(), takeCourseParam.getStatus()); // 회원의 수강 신청 상태 관리 로직
 
         if(!result.isResult()){
             model.addAttribute("message",result.getMessage());

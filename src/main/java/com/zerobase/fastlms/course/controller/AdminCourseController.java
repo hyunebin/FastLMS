@@ -18,17 +18,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminCourseController extends BaseController {
 
-    private final CourseService courseService;
-    private final CategoryService categoryService;
-
-
-
+    private final CourseService courseService; // 서비스를 사용하기 위한 생성자 주입
+    private final CategoryService categoryService;// 서비스를 사용하기 위한 생성자 주입
 
     @GetMapping("/admin/course/list.do")
     public String list(Model model, CourseParam parameter) {
 
         parameter.init();
-        List<CourseDto> courses = courseService.list(parameter);
+        List<CourseDto> courses = courseService.list(parameter); // 코스의 리스트를 불러오는 로직
 
         long totalCount = 0;
         if (courses != null && courses.size() > 0) {
@@ -36,7 +33,7 @@ public class AdminCourseController extends BaseController {
         }
 
         String queryString = parameter.getQueryString();
-        String pagerHtml = getPaperHtml(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString);
+        String pagerHtml = getPaperHtml(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString); // 조건문에 따른 처리 또한 포함
 
         model.addAttribute("list", courses);
         model.addAttribute("totalCount", totalCount);
@@ -46,19 +43,19 @@ public class AdminCourseController extends BaseController {
     }
 
 
-    @GetMapping(value = {"/admin/course/add.do", "/admin/course/edit.do"})
+    @GetMapping(value = {"/admin/course/add.do", "/admin/course/edit.do"})//2개의 페이지는 거의 같은 역할을 함
     public String add(Model model, HttpServletRequest httpServletRequest, CourseParam courseParam){
 
-        boolean editMode = httpServletRequest.getRequestURI().contains("/edit.do");
+        boolean editMode = httpServletRequest.getRequestURI().contains("/edit.do");// 2개의 페이지의 uri를 공유함으로 수정일때는 uri에 포함된 단어로 구분
         CourseDto detail = new CourseDto();
 
 
-        if(editMode){
-            long id = courseParam.getId();
+        if(editMode){//수정모드라면
+            long id = courseParam.getId(); // 강좌번호를 가져옴
 
-            CourseDto courseDto = courseService.getById(id);
+            CourseDto courseDto = courseService.getById(id);// 강좌 번호를 통해 해당 강좌의 정보를 가져옴
 
-            if(courseDto == null){
+            if(courseDto == null){//없을 경우 처리
                 model.addAttribute("message", "강좌정보가 존재하지 않습니다.");
                 return "common/error";
             }
@@ -73,9 +70,9 @@ public class AdminCourseController extends BaseController {
     }
 
     @PostMapping(value = {"/admin/course/delete.do"})
-    public String deleteSubmit(Model model, CourseInput courseInput){
+    public String deleteSubmit(CourseInput courseInput){
 
-        boolean result = courseService.delete(courseInput.getIdList());
+        boolean result = courseService.delete(courseInput.getIdList()); //강좌 삭제는 선택삭제와 전체 삭제가 있음 이것을 문자열에 담아서 String[] 변경해 사용하기 대문에 IdList 사용
 
         return "redirect:/admin/course/list.do";
     }
@@ -83,9 +80,9 @@ public class AdminCourseController extends BaseController {
     @PostMapping(value = {"/admin/course/add.do", "/admin/course/edit.do"})
     public String addSubmit(Model model, CourseInput courseInput, HttpServletRequest httpServletRequest){
 
-        boolean editMode = httpServletRequest.getRequestURI().contains("/edit.do");
+        boolean editMode = httpServletRequest.getRequestURI().contains("/edit.do"); // 위와 동일하게 수정인지 추가인지 확인하기 위해
 
-        if(editMode){
+        if(editMode){ //만약 수정이라면
             long id = courseInput.getId();
 
             CourseDto courseDto = courseService.getById(id);
@@ -95,10 +92,10 @@ public class AdminCourseController extends BaseController {
                 return "common/error";
             }
 
-            boolean result = courseService.update(courseInput);
+            boolean result = courseService.update(courseInput); // 업데이트 로직 사용
 
         }else{
-            boolean result = courseService.add(courseInput);
+            boolean result = courseService.add(courseInput); // 추가 로직을 사용
         }
 
 
